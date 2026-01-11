@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Howard | Personal Website</title>
     
-    <!-- 設定 GitHub 大頭貼為網站 Icon -->
+    <!-- 設定網頁 Icon -->
     <link rel="icon" type="image/png" href="https://github.com/h-o-w-a-r-d.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,8 +13,8 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .repo-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .repo-card:hover { transform: translateY(-8px); border-color: #3b82f6; }
+        .repo-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid #e5e7eb; }
+        .repo-card:hover { transform: translateY(-8px); border-color: #3b82f6; box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1); }
         .bg-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
     </style>
 </head>
@@ -24,138 +24,123 @@
     <nav class="sticky top-0 z-50 bg-glass border-b border-gray-100">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="text-xl font-bold tracking-tighter flex items-center gap-2">
-                <img src="https://github.com/h-o-w-a-r-d.png" class="w-8 h-8 rounded-full">
+                <img src="https://github.com/h-o-w-a-r-d.png" class="w-8 h-8 rounded-full border border-gray-200">
                 <span>H-O-W-A-R-D</span>
             </div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium">
+            <div class="flex space-x-6 text-sm font-medium">
                 <a href="#about" class="hover:text-blue-600 transition">關於</a>
-                <a href="#projects" class="hover:text-blue-600 transition">精選作品</a>
+                <a href="#projects" class="hover:text-blue-600 transition">專案</a>
                 <a href="https://github.com/h-o-w-a-r-d" target="_blank" class="text-lg"><i class="fab fa-github"></i></a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="relative py-24 px-6 overflow-hidden">
-        <div class="max-w-4xl mx-auto text-center relative z-10">
-            <div class="inline-block p-1 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 mb-6">
-                <img src="https://github.com/h-o-w-a-r-d.png" alt="Profile" class="w-32 h-32 rounded-full border-4 border-white shadow-2xl">
+    <header class="py-24 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-block p-1 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 mb-6 shadow-xl">
+                <img src="https://github.com/h-o-w-a-r-d.png" alt="Profile" class="w-32 h-32 rounded-full border-4 border-white">
             </div>
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight text-gray-900">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">
                 你好，我是 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Howard</span>
             </h1>
-            <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-                專注於技術探索與實踐，這是我的個人作品集空間。
+            <p class="text-xl text-gray-600 mb-10">
+                愛好開發與自動化的開發者。
             </p>
             <div class="flex justify-center gap-4">
-                <a href="#projects" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 shadow-lg shadow-blue-200 transition">查看精選作品</a>
+                <a href="#projects" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition shadow-lg shadow-blue-100">查看作品</a>
                 <a href="https://github.com/h-o-w-a-r-d" target="_blank" class="bg-white border border-gray-200 px-8 py-3 rounded-full font-semibold hover:bg-gray-50 transition">GitHub</a>
             </div>
         </div>
     </header>
 
-    <!-- About Section -->
-    <section id="about" class="py-20 bg-white">
-        <div class="max-w-3xl mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold mb-8">關於我</h2>
-            <p class="text-lg text-gray-600 mb-6">
-                我熱衷於開發能解決問題的工具。在 GitHub 上，我記錄了我的學習歷程與開發心得。
-            </p>
-            <div class="flex justify-center gap-6 text-gray-400">
-                <i class="fab fa-html5 text-3xl hover:text-orange-500 transition"></i>
-                <i class="fab fa-css3-alt text-3xl hover:text-blue-500 transition"></i>
-                <i class="fab fa-js text-3xl hover:text-yellow-400 transition"></i>
-                <i class="fab fa-python text-3xl hover:text-blue-400 transition"></i>
-            </div>
-        </div>
-    </section>
-
     <!-- Projects Section -->
-    <section id="projects" class="py-24 max-w-6xl mx-auto px-6">
+    <section id="projects" class="py-24 max-w-6xl mx-auto px-6 border-t border-gray-100">
         <div class="flex flex-col items-center mb-16">
-            <h2 class="text-3xl font-bold mb-4">精選作品</h2>
-            <div class="h-1 w-20 bg-blue-600 rounded-full"></div>
-            <p class="mt-4 text-gray-500 text-center">自動同步我在 GitHub 上 Pin 住的熱門專案</p>
+            <h2 class="text-3xl font-bold mb-4">精選作品 (Pinned)</h2>
+            <div class="h-1 w-12 bg-blue-600 rounded-full"></div>
         </div>
         
-        <!-- Loading State -->
         <div id="loading" class="text-center text-gray-400 py-12">
-            <div class="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-blue-600 rounded-full mb-4" role="status"></div>
-            <p>正在同步專案...</p>
+            <div class="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-blue-600 rounded-full mb-4"></div>
+            <p>正在同步 GitHub 專案...</p>
         </div>
 
-        <!-- Dynamic Pinned Projects Grid -->
         <div id="repo-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- JS 會將卡片插入到這裡 -->
+            <!-- 動態插入 -->
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 border-t border-gray-100 text-center">
-        <p class="text-gray-400 text-sm italic">
-            &copy; 2024 Howard. 
-            <span class="mx-2">•</span> 
-            Powered by GitHub API
-        </p>
+    <footer class="py-12 border-t border-gray-100 text-center text-gray-400 text-sm">
+        <p>&copy; 2024 Howard. 致力於打造更好的使用者體驗。</p>
     </footer>
 
     <script>
-        async function fetchPinnedRepos() {
-            const username = 'h-o-w-a-r-d';
+        // 設定你的 GitHub 帳號
+        const username = 'h-o-w-a-r-d';
+
+        async function renderRepos(repos) {
             const repoGrid = document.getElementById('repo-grid');
             const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+            repoGrid.innerHTML = '';
 
-            try {
-                // 使用開源的 GitHub Pinned API 代理
-                const response = await fetch(`https://github-pinned-repositories.vercel.app/api?username=${username}`);
-                const repos = await response.json();
+            repos.forEach(repo => {
+                const card = document.createElement('a');
+                card.href = repo.link || repo.html_url;
+                card.target = "_blank";
+                card.className = 'repo-card bg-white p-6 rounded-2xl flex flex-col justify-between';
+                
+                const langColor = repo.languageColor || '#3b82f6';
+                const langName = repo.language || repo.language || 'Code';
+                const description = repo.description || '這是一個很棒的專案！';
+                const name = repo.repo || repo.name;
+                const stars = repo.stars || repo.stargazers_count || 0;
 
-                if (!repos || repos.length === 0) {
-                    loading.innerHTML = '<p class="text-gray-500">目前沒有 Pin 住的專案。</p>';
-                    return;
-                }
-
-                loading.style.display = 'none';
-
-                repos.forEach(repo => {
-                    const card = document.createElement('a');
-                    card.href = repo.link;
-                    card.target = "_blank";
-                    card.className = 'repo-card bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col justify-between';
-                    
-                    // 根據 API 回傳的 languageColor 或給預設藍色
-                    const dotColor = repo.languageColor || '#3b82f6';
-
-                    card.innerHTML = `
-                        <div>
-                            <div class="flex justify-between items-start mb-6">
-                                <div class="p-3 bg-blue-50 rounded-xl">
-                                    <i class="fas fa-code text-blue-600"></i>
-                                </div>
-                                <div class="flex space-x-3 text-gray-400 text-xs font-semibold">
-                                    <span><i class="far fa-star"></i> ${repo.stars}</span>
-                                    <span><i class="fas fa-code-branch"></i> ${repo.forks}</span>
-                                </div>
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-2 bg-blue-50 rounded-lg text-blue-600 text-xl">
+                                <i class="far fa-folder"></i>
                             </div>
-                            <h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-blue-600 transition">${repo.repo}</h3>
-                            <p class="text-gray-500 text-sm mb-6 line-clamp-2">
-                                ${repo.description || '這是一個精采的開發專案。'}
-                            </p>
+                            <div class="text-gray-400 text-xs font-mono">
+                                <i class="far fa-star"></i> ${stars}
+                            </div>
                         </div>
-                        <div class="flex items-center">
-                            <span class="w-3 h-3 rounded-full mr-2" style="background-color: ${dotColor}"></span>
-                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">${repo.language || 'Code'}</span>
-                        </div>
-                    `;
-                    repoGrid.appendChild(card);
-                });
-            } catch (error) {
-                console.error('Error fetching pinned repos:', error);
-                loading.innerHTML = '<p class="text-red-500">無法連線到 GitHub API，請確認您的帳號是否有 Pinned Repos。</p>';
+                        <h3 class="text-lg font-bold mb-2 text-gray-900">${name}</h3>
+                        <p class="text-gray-500 text-sm mb-6 line-clamp-3">${description}</p>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-3 h-3 rounded-full mr-2" style="background-color: ${langColor}"></span>
+                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">${langName}</span>
+                    </div>
+                `;
+                repoGrid.appendChild(card);
+            });
+        }
+
+        async function fetchRepos() {
+            try {
+                // 方案 A: 嘗試使用 Pinned API (berrysauce 提供之服務)
+                const pinnedRes = await fetch(`https://pinned.berrysauce.dev/get/${username}`);
+                if (!pinnedRes.ok) throw new Error('Pinned API 失敗');
+                const repos = await pinnedRes.json();
+                renderRepos(repos);
+            } catch (err) {
+                console.warn('Pinned API 抓取失敗，啟動備用方案 (REST API)...');
+                try {
+                    // 方案 B: 如果 Pinned API 失敗，直接抓取 GitHub 官方的 Repos (按更新時間排)
+                    const restRes = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
+                    const repos = await restRes.json();
+                    renderRepos(repos);
+                } catch (finalErr) {
+                    document.getElementById('loading').innerHTML = '<p class="text-red-500">無法連線到 GitHub，請重新整理頁面。</p>';
+                }
             }
         }
 
-        fetchPinnedRepos();
+        fetchRepos();
     </script>
 </body>
 </html>
