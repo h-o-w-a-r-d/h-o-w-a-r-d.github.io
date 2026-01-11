@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,76 +8,107 @@
     <!-- 設定網頁 Icon -->
     <link rel="icon" type="image/png" href="https://github.com/h-o-w-a-r-d.png">
     
+    <!-- Tailwind CSS 設定 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // 啟用手動切換深色模式
+        }
+    </script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .repo-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid #e5e7eb; }
-        .repo-card:hover { transform: translateY(-8px); border-color: #3b82f6; box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1); }
-        .bg-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* 卡片特效 */
+        .repo-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .repo-card:hover { transform: translateY(-8px); }
+        
+        /* 毛玻璃效果 (支援深色) */
+        .bg-glass { 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(10px); 
+        }
+        .dark .bg-glass {
+            background: rgba(17, 24, 39, 0.8);
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 leading-relaxed">
+<body class="bg-gray-50 text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100">
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-glass border-b border-gray-100">
+    <nav class="sticky top-0 z-50 bg-glass border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="text-xl font-bold tracking-tighter flex items-center gap-2">
-                <img src="https://github.com/h-o-w-a-r-d.png" class="w-8 h-8 rounded-full border border-gray-200">
-                <span>H-O-W-A-R-D</span>
+                <img src="https://github.com/h-o-w-a-r-d.png" class="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-700">
+                <span class="dark:text-white">H-O-W-A-R-D</span>
             </div>
-            <div class="flex space-x-6 text-sm font-medium">
-                <a href="#about" class="hover:text-blue-600 transition">關於</a>
-                <a href="#projects" class="hover:text-blue-600 transition">專案</a>
-                <a href="https://github.com/h-o-w-a-r-d" target="_blank" class="text-lg"><i class="fab fa-github"></i></a>
+            
+            <div class="flex items-center gap-6">
+                <!-- 選單連結 -->
+                <div class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#about" class="hover:text-blue-600 dark:hover:text-blue-400 transition">關於</a>
+                    <a href="#projects" class="hover:text-blue-600 dark:hover:text-blue-400 transition">專案</a>
+                    <a href="https://github.com/h-o-w-a-r-d" target="_blank" class="text-lg hover:text-blue-600 dark:hover:text-blue-400"><i class="fab fa-github"></i></a>
+                </div>
+
+                <!-- 暗夜模式切換按鈕 -->
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition focus:outline-none">
+                    <i class="fas fa-moon text-gray-600 dark:hidden"></i>
+                    <i class="fas fa-sun text-yellow-400 hidden dark:block"></i>
+                </button>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="py-24 px-6">
+    <header class="py-24 px-6 relative overflow-hidden">
+        <!-- 背景裝飾 (深色模式會有微光效果) -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-200/30 rounded-full blur-[100px] -z-10 dark:bg-blue-900/20"></div>
+
         <div class="max-w-4xl mx-auto text-center">
             <div class="inline-block p-1 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 mb-6 shadow-xl">
-                <img src="https://github.com/h-o-w-a-r-d.png" alt="Profile" class="w-32 h-32 rounded-full border-4 border-white">
+                <img src="https://github.com/h-o-w-a-r-d.png" alt="Profile" class="w-32 h-32 rounded-full border-4 border-white dark:border-gray-800">
             </div>
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight">
-                你好，我是 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Howard</span>
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight dark:text-white">
+                你好，我是 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-400">Howard</span>
             </h1>
-            <p class="text-xl text-gray-600 mb-10">
-                愛好開發與自動化的開發者。
+            <p class="text-xl text-gray-600 dark:text-gray-400 mb-10">
+                愛好自動化的懶人開發者
             </p>
             <div class="flex justify-center gap-4">
-                <a href="#projects" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition shadow-lg shadow-blue-100">查看作品</a>
-                <a href="https://github.com/h-o-w-a-r-d" target="_blank" class="bg-white border border-gray-200 px-8 py-3 rounded-full font-semibold hover:bg-gray-50 transition">GitHub</a>
+                <a href="#projects" class="bg-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-blue-700 transition shadow-lg shadow-blue-500/30">查看作品</a>
+                <a href="https://github.com/h-o-w-a-r-d" target="_blank" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-8 py-3 rounded-full font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition">GitHub</a>
             </div>
         </div>
     </header>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-white">
+    <section id="about" class="py-20 bg-white dark:bg-gray-800 transition-colors duration-300">
         <div class="max-w-3xl mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold mb-8">關於我</h2>
-            <p class="text-lg text-gray-600 mb-6">
+            <h2 class="text-3xl font-bold mb-8 dark:text-white">關於我</h2>
+            <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-loose">
                 一個嚮往編程的高中學生<br>
-                會寫一點python、c++以及幾乎忘記的html<br>
-                其他程式語言：JavaScript看得懂一點與CSS基本看得懂<br>
-                也會用vibe coding編寫程式碼
+                會寫一點 Python、C++ 以及幾乎忘記的 HTML<br>
+                其他程式語言：JavaScript 看得懂一點與 CSS 基本看得懂<br>
+                也會用 vibe coding 編寫程式碼
             </p>
-            <div class="flex justify-center gap-6 text-gray-400">
-                <i class="fab fa-html5 text-3xl hover:text-orange-500 transition"></i>
-                <i class="fab fa-css3-alt text-3xl hover:text-blue-500 transition"></i>
-                <i class="fab fa-js text-3xl hover:text-yellow-400 transition"></i>
-                <i class="fab fa-python text-3xl hover:text-blue-400 transition"></i>
+            <div class="flex justify-center gap-8 text-gray-400 dark:text-gray-500">
+                <i class="fab fa-python text-4xl hover:text-blue-400 transition cursor-pointer" title="Python"></i>
+                <i class="fas fa-code text-4xl hover:text-blue-600 transition cursor-pointer" title="C++"></i>
+                <i class="fab fa-js text-4xl hover:text-yellow-400 transition cursor-pointer" title="JavaScript"></i>
+                <i class="fab fa-html5 text-4xl hover:text-orange-500 transition cursor-pointer" title="HTML"></i>
             </div>
         </div>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-24 max-w-6xl mx-auto px-6 border-t border-gray-100">
+    <section id="projects" class="py-24 max-w-6xl mx-auto px-6 border-t border-gray-100 dark:border-gray-800">
         <div class="flex flex-col items-center mb-16">
-            <h2 class="text-3xl font-bold mb-4">精選作品</h2>
+            <h2 class="text-3xl font-bold mb-4 dark:text-white">精選作品</h2>
             <div class="h-1 w-12 bg-blue-600 rounded-full"></div>
+            <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm">自動同步自 GitHub (Pinned & Updated)</p>
         </div>
         
         <div id="loading" class="text-center text-gray-400 py-12">
@@ -91,12 +122,37 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 border-t border-gray-100 text-center text-gray-400 text-sm">
+    <footer class="py-12 border-t border-gray-100 dark:border-gray-800 text-center text-gray-400 text-sm">
         <p>&copy; 2024 Howard. 致力於打造更好的使用者體驗。</p>
     </footer>
 
     <script>
-        // 設定你的 GitHub 帳號
+        // ----------------------------------------
+        // 1. 暗夜模式邏輯
+        // ----------------------------------------
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        // 檢查使用者之前的設定
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        // 按鈕點擊事件
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            if (htmlElement.classList.contains('dark')) {
+                localStorage.theme = 'dark';
+            } else {
+                localStorage.theme = 'light';
+            }
+        });
+
+        // ----------------------------------------
+        // 2. GitHub 專案抓取邏輯 (修復網址問題)
+        // ----------------------------------------
         const username = 'h-o-w-a-r-d';
 
         async function renderRepos(repos) {
@@ -107,32 +163,49 @@
 
             repos.forEach(repo => {
                 const card = document.createElement('a');
-                card.href = repo.link || repo.html_url;
+                
+                // --- 關鍵修正：確保網址絕對正確 ---
+                // 優先使用 link (Pinned API)，沒有則用 html_url (GitHub API)，再沒有則手動組合
+                let projectUrl = repo.link; 
+                if (!projectUrl || projectUrl === "undefined") {
+                    projectUrl = repo.html_url;
+                }
+                if (!projectUrl || projectUrl === "undefined") {
+                    // 終極備案：手動組合網址
+                    const repoName = repo.repo || repo.name;
+                    projectUrl = `https://github.com/${username}/${repoName}`;
+                }
+
+                card.href = projectUrl;
                 card.target = "_blank";
-                card.className = 'repo-card bg-white p-6 rounded-2xl flex flex-col justify-between';
+                
+                // 設定卡片樣式 (支援深色模式)
+                card.className = 'repo-card bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 rounded-2xl flex flex-col justify-between hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-lg dark:hover:shadow-blue-900/20';
                 
                 const langColor = repo.languageColor || '#3b82f6';
-                const langName = repo.language || repo.language || 'Code';
-                const description = repo.description || '這是一個很棒的專案！';
+                const langName = repo.language || 'Code';
+                const description = repo.description || '這是一個很棒的專案！點擊查看更多。';
                 const name = repo.repo || repo.name;
                 const stars = repo.stars || repo.stargazers_count || 0;
 
                 card.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start mb-4">
-                            <div class="p-2 bg-blue-50 rounded-lg text-blue-600 text-xl">
+                            <div class="p-2 bg-blue-50 dark:bg-gray-700 rounded-lg text-blue-600 dark:text-blue-400 text-xl">
                                 <i class="far fa-folder"></i>
                             </div>
-                            <div class="text-gray-400 text-xs font-mono">
+                            <div class="text-gray-400 text-xs font-mono flex items-center gap-1">
                                 <i class="far fa-star"></i> ${stars}
                             </div>
                         </div>
-                        <h3 class="text-lg font-bold mb-2 text-gray-900">${name}</h3>
-                        <p class="text-gray-500 text-sm mb-6 line-clamp-3">${description}</p>
+                        <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white truncate">${name}</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 line-clamp-3 h-[60px]">
+                            ${description}
+                        </p>
                     </div>
                     <div class="flex items-center">
-                        <span class="w-3 h-3 rounded-full mr-2" style="background-color: ${langColor}"></span>
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-widest">${langName}</span>
+                        <span class="w-3 h-3 rounded-full mr-2 shadow-sm" style="background-color: ${langColor}"></span>
+                        <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">${langName}</span>
                     </div>
                 `;
                 repoGrid.appendChild(card);
@@ -141,7 +214,7 @@
 
         async function fetchRepos() {
             try {
-                // 方案 A: 嘗試使用 Pinned API (berrysauce 提供之服務)
+                // 優先嘗試 Pinned API
                 const pinnedRes = await fetch(`https://pinned.berrysauce.dev/get/${username}`);
                 if (!pinnedRes.ok) throw new Error('Pinned API 失敗');
                 const repos = await pinnedRes.json();
@@ -149,7 +222,7 @@
             } catch (err) {
                 console.warn('Pinned API 抓取失敗，啟動備用方案 (REST API)...');
                 try {
-                    // 方案 B: 如果 Pinned API 失敗，直接抓取 GitHub 官方的 Repos (按更新時間排)
+                    // 備用：GitHub 官方 API
                     const restRes = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
                     const repos = await restRes.json();
                     renderRepos(repos);
