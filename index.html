@@ -41,73 +41,64 @@
             font-family: 'JetBrains Mono', monospace;
             cursor: default;
         }
-    </style>
 
-    <!-- [新增] 老化特效專用樣式 -->
-    <style>
-        /* 覆蓋層容器，確保不擋住滑鼠喚醒 */
-        #decay-overlay {
+        /* =========================================
+           [修改] 休眠動畫樣式 (Z letters)
+           ========================================= */
+        #sleep-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            pointer-events: none; /* 讓滑鼠穿透，確保能偵測到動作 */
+            pointer-events: none;
             z-index: 9999;
             overflow: hidden;
-            mix-blend-mode: multiply; /* 讓污漬融合背景 */
-        }
-        
-        /* 暗黑模式下調整混合模式 */
-        html.dark #decay-overlay {
-            mix-blend-mode: screen; 
-            opacity: 0.8;
         }
 
-        /* 蜘蛛網動畫 */
-        .spiderweb {
+        @keyframes floatZ {
+            0% {
+                transform: translateX(0) translateY(0) scale(0.5) rotate(-10deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateX(20px) translateY(-150px) scale(1.5) rotate(10deg);
+                opacity: 0;
+            }
+        }
+
+        .z-letter {
             position: absolute;
-            stroke: rgba(200, 200, 200, 0.4);
-            stroke-width: 1;
-            fill: none;
-            opacity: 0;
-            transition: opacity 2s ease-in;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* 卡通字體 */
+            font-weight: 900;
+            color: #60a5fa; /* Blue-400 */
+            animation: floatZ 4s linear forwards;
+            will-change: transform, opacity;
         }
-        html.dark .spiderweb { stroke: rgba(100, 100, 100, 0.5); }
 
-        /* 雜草動畫 */
-        .grass {
-            position: absolute;
-            bottom: 0;
-            fill: #4ade80; /* Tailwind green-400 */
-            opacity: 0;
-            transform-origin: bottom center;
-            transform: scaleY(0);
-            transition: all 3s ease-out;
+        html.dark .z-letter {
+            color: #a78bfa; /* Violet-400 */
+            text-shadow: 0 0 10px rgba(167, 139, 250, 0.5);
         }
-        html.dark .grass { fill: #166534; } /* Tailwind green-800 */
 
-        /* 裂痕 */
-        .crack {
-            position: absolute;
-            stroke: rgba(0,0,0,0.2);
-            stroke-width: 2;
-            fill: none;
-            opacity: 0;
-            transition: opacity 1s;
+        /* 睡眠時頁面變暗 */
+        body.sleeping {
+            filter: brightness(0.6) blur(1px);
+            transition: filter 1s ease;
         }
-        html.dark .crack { stroke: rgba(255,255,255,0.2); }
-
-        /* 全局濾鏡過渡 */
-        body {
-            transition: filter 2s ease;
+        body:not(.sleeping) {
+            filter: brightness(1) blur(0);
+            transition: filter 0.3s ease-out;
         }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100">
 
-    <!-- [新增] 老化與特效覆蓋層 -->
-    <div id="decay-overlay"></div>
+    <!-- [修改] 休眠動畫覆蓋層 -->
+    <div id="sleep-overlay"></div>
 
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-glass border-b border-gray-200 dark:border-gray-800 transition-colors duration-300">
@@ -199,7 +190,7 @@
 
     <script>
         // ==========================================
-        //  1. Hacker Text Effect (亂碼特效邏輯) - 保留原樣
+        //  1. Hacker Text Effect
         // ==========================================
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+";
         const hackerElements = document.querySelectorAll('.hacker-text');
@@ -227,7 +218,7 @@
         });
 
         // ==========================================
-        //  2. 暗夜模式邏輯 - 保留原樣
+        //  2. Dark Mode Logic
         // ==========================================
         const themeToggleBtn = document.getElementById('theme-toggle');
         const htmlElement = document.documentElement;
@@ -248,7 +239,7 @@
         });
 
         // ==========================================
-        //  3. GitHub 專案抓取邏輯 - 保留原樣
+        //  3. GitHub Projects Fetching
         // ==========================================
         const username = 'h-o-w-a-r-d';
 
@@ -321,181 +312,99 @@
     </script>
 
     <!-- ==========================================
-         [新增] 4. Wake Lock & Idle Decay Effects
+         [修改] 4. Wake Lock & Z-Sleeping Effect
          ========================================== -->
     <script>
         // 4.1 防止休眠 (Wake Lock)
         let wakeLock = null;
-
         async function requestWakeLock() {
             try {
                 if ('wakeLock' in navigator) {
                     wakeLock = await navigator.wakeLock.request('screen');
-                    console.log('Wake Lock is active (螢幕不會休眠)');
-                    
-                    wakeLock.addEventListener('release', () => {
-                        console.log('Wake Lock released');
-                    });
+                    wakeLock.addEventListener('release', () => console.log('Wake Lock released'));
                 }
-            } catch (err) {
-                console.error(`Wake Lock Error: ${err.name}, ${err.message}`);
-            }
+            } catch (err) { console.error(`Wake Lock Error: ${err.message}`); }
         }
-
-        // 頁面可見性改變時重新請求鎖
         document.addEventListener('visibilitychange', async () => {
-            if (wakeLock !== null && document.visibilityState === 'visible') {
-                await requestWakeLock();
-            }
+            if (wakeLock !== null && document.visibilityState === 'visible') await requestWakeLock();
         });
+        window.onload = requestWakeLock;
 
-        // 4.2 閒置老化特效
+        // 4.2 休眠 Z 特效 (Sleeping Effect)
         let idleTime = 0;
-        const decayOverlay = document.getElementById('decay-overlay');
-        
-        // 生成隨機整數
+        let isSleeping = false;
+        let zInterval = null;
+        const sleepOverlay = document.getElementById('sleep-overlay');
         const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-        // 生成 SVG 蜘蛛網
-        function createSpiderWeb() {
-            const size = rand(100, 300);
-            const x = rand(0, 1) ? rand(-50, 50) : window.innerWidth - size + rand(-50, 50);
-            const y = rand(0, 1) ? rand(-50, 50) : window.innerHeight - size + rand(-50, 50);
+        // 生成 Z 字母
+        function createZ() {
+            const z = document.createElement('div');
+            z.innerText = 'Z';
+            z.className = 'z-letter';
             
-            const svgNS = "http://www.w3.org/2000/svg";
-            const svg = document.createElementNS(svgNS, "svg");
-            svg.setAttribute("width", size);
-            svg.setAttribute("height", size);
-            svg.setAttribute("class", "spiderweb");
-            svg.style.left = `${x}px`;
-            svg.style.top = `${y}px`;
+            // 隨機大小
+            const size = rand(20, 60);
+            z.style.fontSize = `${size}px`;
             
-            // 簡單的網狀線條
-            let d = "";
-            for(let i=0; i<8; i++) {
-                d += `M${size/2},${size/2} L${rand(0, size)},${rand(0,size)} `;
-            }
-            // 同心圓
-            for(let i=1; i<=4; i++) {
-                const r = (size/2) * (i/5);
-                d += `M${size/2 + r},${size/2} A${r},${r} 0 1,1 ${size/2 - r},${size/2} `;
-            }
+            // 隨機位置 (隨機從螢幕各處冒出)
+            z.style.left = `${rand(5, 95)}vw`;
+            z.style.top = `${rand(20, 90)}vh`;
+            
+            // 隨機動畫時間
+            const duration = rand(3, 6);
+            z.style.animationDuration = `${duration}s`;
+            
+            sleepOverlay.appendChild(z);
 
-            const path = document.createElementNS(svgNS, "path");
-            path.setAttribute("d", d);
-            svg.appendChild(path);
-            
-            decayOverlay.appendChild(svg);
-            // 強制重繪後顯示
-            setTimeout(() => svg.style.opacity = 0.6, 100);
-        }
-
-        // 生成雜草
-        function createGrass() {
-            const svgNS = "http://www.w3.org/2000/svg";
-            const h = rand(30, 80);
-            const w = rand(10, 20);
-            const x = rand(0, window.innerWidth);
-            
-            const svg = document.createElementNS(svgNS, "svg");
-            svg.setAttribute("width", w);
-            svg.setAttribute("height", h);
-            svg.setAttribute("class", "grass");
-            svg.style.left = `${x}px`;
-            
-            // 畫一根草
-            const path = document.createElementNS(svgNS, "path");
-            path.setAttribute("d", `M0,${h} Q${w/2},${h/2} ${rand(0,w)},0 L${w},${h} Z`);
-            svg.appendChild(path);
-            
-            decayOverlay.appendChild(svg);
+            // 動畫結束後移除 DOM
             setTimeout(() => {
-                svg.style.opacity = 0.8;
-                svg.style.transform = "scaleY(1)";
-            }, 100);
+                z.remove();
+            }, duration * 1000);
         }
 
-        // 生成裂痕
-        function createCrack() {
-            const size = rand(100, 200);
-            const x = rand(100, window.innerWidth - 100);
-            const y = rand(100, window.innerHeight - 100);
+        function startSleeping() {
+            if (isSleeping) return;
+            isSleeping = true;
+            document.body.classList.add('sleeping');
+            console.log("Entering sleep mode...");
             
-            const svgNS = "http://www.w3.org/2000/svg";
-            const svg = document.createElementNS(svgNS, "svg");
-            svg.setAttribute("width", size);
-            svg.setAttribute("height", size);
-            svg.setAttribute("class", "crack");
-            svg.style.left = `${x}px`;
-            svg.style.top = `${y}px`;
-            svg.style.transform = `rotate(${rand(0, 360)}deg)`;
-
-            let d = `M${size/2},${size/2} `;
-            let cx = size/2;
-            let cy = size/2;
-            for(let i=0; i<5; i++) {
-                cx += rand(-20, 20);
-                cy += rand(-20, 20);
-                d += `L${cx},${cy} `;
-            }
-
-            const path = document.createElementNS(svgNS, "path");
-            path.setAttribute("d", d);
-            svg.appendChild(path);
-            
-            decayOverlay.appendChild(svg);
-            setTimeout(() => svg.style.opacity = 1, 100);
+            // 每 800ms 生成一個 Z
+            zInterval = setInterval(createZ, 800);
         }
 
-        // 主要閒置計時器
-        const timerInterval = setInterval(() => {
-            idleTime++;
+        function stopSleeping() {
+            if (!isSleeping) return;
+            isSleeping = false;
+            document.body.classList.remove('sleeping');
+            console.log("Waking up!");
             
-            // 階段 1: 5秒後開始變黃 (泛黃的舊紙張感)
-            if (idleTime > 5) {
-                const sepiaAmount = Math.min((idleTime - 5) * 2, 60); // Max 60%
-                const blurAmount = Math.min((idleTime - 5) * 0.1, 2); // Max 2px
-                document.body.style.filter = `sepia(${sepiaAmount}%) blur(${blurAmount}px) contrast(1.1)`;
-            }
+            clearInterval(zInterval);
+            sleepOverlay.innerHTML = ''; // 立即清除所有 Z
+        }
 
-            // 階段 2: 10秒後開始長蜘蛛網 (每3秒長一個)
-            if (idleTime > 10 && idleTime % 3 === 0) {
-                createSpiderWeb();
-            }
-
-            // 階段 3: 15秒後開始長草 (每1秒長一根)
-            if (idleTime > 15 && idleTime % 1 === 0) {
-                createGrass();
-            }
-
-            // 階段 4: 25秒後開始裂開 (每5秒裂一次)
-            if (idleTime > 25 && idleTime % 5 === 0) {
-                createCrack();
-            }
-
-        }, 1000); // 每秒檢查一次
-
-        // 重置函數
         function resetTimer() {
-            // 如果已經閒置了一段時間，清除特效
-            if (idleTime > 5) {
-                decayOverlay.innerHTML = ''; // 清除所有 SVG
-                document.body.style.filter = 'none'; // 清除濾鏡
-                console.log("歡迎回來，特效已清除");
-            }
             idleTime = 0;
-            
-            // 每次互動也順便確認 Wake Lock 是否還在
+            if (isSleeping) {
+                stopSleeping();
+            }
+            // 確保 Wake Lock 保持活躍
             if (wakeLock === null) requestWakeLock();
         }
 
-        // 綁定事件：只要有動作就重置
-        window.onload = requestWakeLock; // 載入時嘗試鎖定
-        document.onmousemove = resetTimer;
-        document.onkeypress = resetTimer;
-        document.ontouchstart = resetTimer;
-        document.onclick = resetTimer;
-        document.onscroll = resetTimer;
+        // 閒置偵測計時器
+        setInterval(() => {
+            idleTime++;
+            // 閒置 5 秒後開始睡覺
+            if (idleTime > 5) {
+                startSleeping();
+            }
+        }, 1000);
+
+        // 綁定事件重置計時
+        ['mousemove', 'keypress', 'touchstart', 'click', 'scroll'].forEach(evt => {
+            document.addEventListener(evt, resetTimer, { passive: true });
+        });
 
     </script>
 </body>
